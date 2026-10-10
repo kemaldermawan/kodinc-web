@@ -8,13 +8,13 @@ const LINKS = [
 ];
 
 export default function Navbar() {
-  const { totalItems } = useCart();
+  const { totalItems, openCart } = useCart();
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-cocoa bg-cream">
+    <header className="on-dark sticky top-0 z-40 border-b-2 border-navy bg-brand text-cream">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3">
         <Link to="/" className="font-display text-2xl font-extrabold tracking-tight">
-          kodinc<span className="text-tomato">.</span>
+          kodinc<span className="text-sun">.</span>
         </Link>
 
         <nav
@@ -27,8 +27,8 @@ export default function Navbar() {
               to={to}
               end={end}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-bold transition ${
-                  isActive ? "bg-cocoa text-cream" : "hover:bg-cocoa/10"
+                `whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-bold transition ${
+                  isActive ? "bg-cream text-navy" : "hover:bg-cream/15"
                 }`
               }
             >
@@ -37,17 +37,18 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <Link
-          to="/keranjang"
-          className="inline-flex items-center gap-2 rounded-full border-2 border-cocoa bg-white px-3.5 py-1.5 text-sm font-bold transition hover:bg-butter"
+        <button
+          type="button"
+          onClick={openCart}
+          className="inline-flex items-center gap-2 rounded-lg border-2 border-navy bg-cream px-3.5 py-1.5 text-sm font-bold text-navy shadow-hard transition hover:bg-sun"
         >
           Keranjang
           {totalItems > 0 && (
-            <span className="min-w-5 rounded-full bg-tomato px-1.5 text-center text-xs text-white">
+            <span className="min-w-5 rounded-md bg-brand px-1.5 text-center text-xs text-cream">
               {totalItems}
             </span>
           )}
-        </Link>
+        </button>
       </div>
     </header>
   );

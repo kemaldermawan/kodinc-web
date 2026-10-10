@@ -2,11 +2,11 @@ import { SITE } from "../config/site";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t-2 border-cocoa bg-cocoa text-cream">
+    <footer className="on-dark mt-20 border-t-2 border-navy bg-navy text-cream">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
         <div>
           <p className="font-display text-2xl font-extrabold">
-            kodinc<span className="text-butter">.</span>
+            kodinc<span className="text-sun">.</span>
           </p>
           <p className="mt-2 max-w-xs text-sm text-cream/70">{SITE.tagline}</p>
         </div>

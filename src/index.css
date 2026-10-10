@@ -4,17 +4,28 @@
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --color-cream: #fbf4e6;
-  --color-cocoa: #2a1810;
-  --color-tomato: #c23a17;
-  --color-butter: #f5c842;
-  --color-blush: #f3c9c0;
-  --color-sage: #bfd8b8;
-  --color-latte: #e3c9a8;
-  --color-sky: #bcd9e8;
+  /* Identitas Kodinc */
+  --color-brand: #c21121; /* merah: navbar, badge harga, stiker */
+  --color-navy: #012f49; /* teks, border, footer */
+  --color-cream: #fef0d5; /* background, card, input */
 
-  --shadow-hard: 4px 4px 0 0 #2a1810;
-  --shadow-hard-sm: 2px 2px 0 0 #2a1810;
+  /* Aksen */
+  --color-sun: #fbbf24; /* amber: CTA utama & Best Seller */
+  --color-sand: #f6dcab;
+
+  --shadow-hard: 3px 3px 0 0 #012f49;
+  --shadow-hard-lg: 5px 5px 0 0 #012f49;
+
+  --animate-bob: bob 4s ease-in-out infinite;
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 }
 
 @layer base {
@@ -22,30 +33,43 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-cream font-sans text-cocoa antialiased;
+    @apply bg-cream font-sans text-navy antialiased;
+    background-image: radial-gradient(rgb(1 47 73 / 0.14) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
   }
   :focus-visible {
-    outline: 3px solid var(--color-tomato);
+    outline: 3px solid var(--color-navy);
     outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-sun);
   }
 }
 
 @layer components {
   .btn-primary,
+  .btn-dark,
   .btn-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-cocoa px-5 py-2.5 font-bold shadow-hard-sm transition;
-    @apply active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-navy px-5 py-2.5 font-bold shadow-hard transition;
+    @apply hover:-translate-y-0.5 hover:shadow-hard-lg active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
   }
+  /* CTA utama (amber) */
   .btn-primary {
-    @apply bg-tomato text-white hover:brightness-110;
+    @apply bg-sun text-navy;
+  }
+  .btn-dark {
+    @apply bg-navy text-cream;
   }
   .btn-light {
-    @apply bg-white text-cocoa hover:bg-butter;
+    @apply bg-cream text-navy hover:bg-sun;
   }
   .card {
-    @apply rounded-2xl border-2 border-cocoa bg-white shadow-hard;
+    @apply rounded-2xl border-2 border-navy bg-cream shadow-hard;
   }
   .field {
-    @apply w-full rounded-xl border-2 border-cocoa bg-white px-3.5 py-2.5 text-base placeholder:text-cocoa/40;
+    @apply w-full rounded-xl border-2 border-navy bg-cream px-3.5 py-2.5 text-base placeholder:text-navy/40;
+  }
+  .price-badge {
+    @apply inline-block -rotate-2 rounded-md border-2 border-navy bg-brand px-2.5 py-0.5 font-display text-base font-extrabold text-cream;
   }
 }

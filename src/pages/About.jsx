@@ -5,20 +5,21 @@ export default function About() {
     <div className="mx-auto max-w-6xl px-4 py-12">
       <div className="grid gap-10 lg:grid-cols-2">
         <section>
-          <p className="text-sm font-bold uppercase tracking-widest text-tomato">Tentang kami</p>
-          <h1 className="mt-3 text-balance font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Kodinc, jajanan kampus yang bisa dipesan dulu.
+          <p className="inline-block -rotate-2 rounded-md border-2 border-navy bg-brand px-3 py-1 text-xs font-bold uppercase tracking-widest text-cream">
+            Tentang Kami
+          </p>
+          <h1 className="mt-4 text-balance font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+            Kodinc, temen nyemil buat hari-hari sibukmu.
           </h1>
-          <p className="mt-5 text-lg text-cocoa/75">
-            Kodinc menjual cookies, donat, es coklat, kopi, dan dimsum untuk teman-teman kampus.
-            Sistemnya pre-order: kamu pesan, pilih jadwal ambil, lalu pesanan diambil di{" "}
-            {SITE.pickupLocation}.
+          <p className="mt-5 text-lg text-navy/80">
+            Siap nemenin hari-hari sibukmu dengan asupan sweet treats, savory snacks, dan
+            minuman segar berkualitas.
           </p>
-          {/* Ganti paragraf di bawah dengan cerita asli Kodinc */}
-          <p className="mt-4 text-lg text-cocoa/75">
-            Tulis di sini cerita singkat Kodinc: siapa yang bikin, kenapa mulai, dan apa yang
-            bikin menunya beda.
+          <p className="mt-4 text-lg text-navy/80">
+            Semua menu dipesan lewat sistem pre-order: pilih menu, atur jadwal ambil, lalu ambil
+            langsung di {SITE.pickupLocation} pada jam {SITE.hoursLabel}.
           </p>
+          {/* Ganti atau tambahkan paragraf cerita asli Kodinc di sini */}
         </section>
 
         <section>
@@ -30,7 +31,7 @@ export default function About() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="card flex items-center justify-between p-4 font-bold transition hover:-translate-y-0.5 hover:bg-butter"
+                  className="card flex items-center justify-between p-4 font-bold transition hover:-translate-y-0.5 hover:bg-sun"
                 >
                   {s.label}
                   <span aria-hidden="true">↗</span>
@@ -39,10 +40,10 @@ export default function About() {
             ))}
           </ul>
 
-          <div className="mt-6 rounded-xl border-2 border-dashed border-cocoa p-4 text-sm">
-            <p className="font-bold">Lokasi ambil</p>
-            <p className="mt-1 text-cocoa/75">
-              {SITE.pickupLocation}, pukul {SITE.pickupSlots[0]}–{SITE.pickupSlots.at(-1)} WIB.
+          <div className="mt-6 rounded-xl border-2 border-dashed border-navy p-4 text-sm">
+            <p className="font-bold">Pickup Point</p>
+            <p className="mt-1 text-navy/75">
+              {SITE.pickupLocation} • {SITE.hoursLabel}
             </p>
           </div>
         </section>

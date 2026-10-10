@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { PRODUCTS } from "../data/products";
 
 const STORAGE_KEY = "kodinc-cart-v1";
@@ -42,6 +50,10 @@ const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [lines, dispatch] = useReducer(cartReducer, [], loadLines);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openCart = useCallback(() => setIsOpen(true), []);
+  const closeCart = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
     try {
@@ -54,7 +66,7 @@ export function CartProvider({ children }) {
   const value = useMemo(() => {
     const items = lines.flatMap((line) => {
       const product = PRODUCTS.find((p) => p.id === line.id);
-      return product ? [{ ...product, qty: line.qty }] : [];
+      return product && !product.comingSoon ? [{ ...product, qty: line.qty }] : [];
     });
 
     return {
@@ -66,8 +78,11 @@ export function CartProvider({ children }) {
       decrementItem: (id) => dispatch({ type: "DECREMENT", id }),
       removeItem: (id) => dispatch({ type: "REMOVE", id }),
       clearCart: () => dispatch({ type: "CLEAR" }),
+      isOpen,
+      openCart,
+      closeCart,
     };
-  }, [lines]);
+  }, [lines, isOpen, openCart, closeCart]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

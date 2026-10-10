@@ -1,9 +1,9 @@
 export default function QuantityStepper({ qty, label, onIncrement, onDecrement }) {
   const btn =
-    "grid size-9 place-items-center text-lg font-bold transition hover:bg-butter rounded-full";
+    "grid size-9 place-items-center text-lg font-bold transition hover:bg-sun rounded-full";
 
   return (
-    <div className="inline-flex items-center rounded-full border-2 border-cocoa bg-white">
+    <div className="inline-flex items-center rounded-full border-2 border-navy bg-cream">
       <button type="button" onClick={onDecrement} aria-label={`Kurangi ${label}`} className={btn}>
         −
       </button>

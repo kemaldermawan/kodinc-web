@@ -34,9 +34,9 @@ function Field({ id, label, hint, error, children }) {
         {label}
       </label>
       {children}
-      {hint && !error && <p className="mt-1 text-sm text-cocoa/60">{hint}</p>}
+      {hint && !error && <p className="mt-1 text-sm text-navy/60">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold text-red-700">
+        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold text-brand">
           {error}
         </p>
       )}
@@ -45,7 +45,7 @@ function Field({ id, label, hint, error, children }) {
 }
 
 export default function Checkout() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, openCart } = useCart();
   const navigate = useNavigate();
 
   const minDate = useMemo(() => minPickupDate(SITE.minLeadDays), []);
@@ -91,8 +91,10 @@ export default function Checkout() {
   if (items.length === 0 && !waUrl) {
     return (
       <div className="mx-auto max-w-xl px-4 py-24 text-center">
-        <h1 className="font-display text-3xl font-extrabold">Belum ada yang dipesan</h1>
-        <p className="mt-3 text-cocoa/75">Isi keranjang dulu sebelum checkout.</p>
+        <h1 className="font-display text-3xl font-extrabold leading-tight">
+          Perut Masih Kosong, Keranjang Juga Kosong! 🛒
+        </h1>
+        <p className="mt-3 text-navy/75">Yuk pilih cemilan favoritmu dulu.</p>
         <Link to="/menu" className="btn-primary mt-8">
           Lihat menu
         </Link>
@@ -114,7 +116,7 @@ export default function Checkout() {
                 autoComplete="name"
                 value={form.name}
                 onChange={setField("name")}
-                placeholder="Contoh: Kemal Pratama"
+                placeholder="Nama kamu"
                 aria-invalid={Boolean(errors.name)}
                 aria-describedby={errors.name ? "field-name-error" : undefined}
                 className="field"
@@ -123,7 +125,7 @@ export default function Checkout() {
             <Field
               id="field-notes"
               label="Catatan khusus (opsional)"
-              hint="Misalnya: tanpa gula, dimsum tanpa saus pedas."
+              hint="Misalnya: es-nya dikit aja, saus dipisah."
             >
               <textarea
                 id="field-notes"
@@ -137,8 +139,9 @@ export default function Checkout() {
           </Section>
 
           <Section title="2. Pengambilan pesanan">
-            <p className="rounded-xl border-2 border-dashed border-cocoa px-4 py-3 text-sm">
-              Lokasi ambil: <strong>{SITE.pickupLocation}</strong>
+            <p className="rounded-xl border-2 border-dashed border-navy px-4 py-3 text-sm">
+              Pickup Point: <strong>{SITE.pickupLocation}</strong> • Jam ambil{" "}
+              <strong>{SITE.hoursLabel}</strong>
             </p>
             <div className="grid gap-5 sm:grid-cols-2">
               <Field id="field-pickupDate" label="Tanggal" error={errors.pickupDate}>
@@ -180,7 +183,7 @@ export default function Checkout() {
                 {PAYMENT_METHODS.map((m, i) => (
                   <label
                     key={m.id}
-                    className="flex cursor-pointer gap-3 rounded-xl border-2 border-cocoa bg-white p-3.5 transition has-[:checked]:bg-butter"
+                    className="flex cursor-pointer gap-3 rounded-xl border-2 border-navy bg-cream p-3.5 transition has-[:checked]:bg-sun"
                   >
                     <input
                       id={i === 0 ? "field-payment" : undefined}
@@ -189,24 +192,24 @@ export default function Checkout() {
                       value={m.id}
                       checked={form.payment === m.id}
                       onChange={setField("payment")}
-                      className="mt-1 size-4 accent-cocoa"
+                      className="mt-1 size-4 accent-navy"
                     />
                     <span>
                       <span className="block font-bold">{m.label}</span>
-                      <span className="block text-sm text-cocoa/70">{m.hint}</span>
+                      <span className="block text-sm text-navy/70">{m.hint}</span>
                     </span>
                   </label>
                 ))}
               </div>
               {errors.payment && (
-                <p role="alert" className="mt-2 text-sm font-semibold text-red-700">
+                <p role="alert" className="mt-2 text-sm font-semibold text-brand">
                   {errors.payment}
                 </p>
               )}
             </fieldset>
 
             {form.payment === "qris-now" && (
-              <div className="rounded-xl border-2 border-dashed border-cocoa p-4 text-center">
+              <div className="rounded-xl border-2 border-dashed border-navy p-4 text-center">
                 <img
                   src="/qris.png"
                   alt="QRIS Kodinc"
@@ -225,31 +228,31 @@ export default function Checkout() {
         <aside className="card p-5 lg:sticky lg:top-24">
           <h2 className="font-display text-xl font-extrabold">Ringkasan pesanan</h2>
 
-          <ul className="mt-4 divide-y divide-cocoa/15">
+          <ul className="mt-4 divide-y divide-navy/15">
             {items.map((item) => (
               <li key={item.id} className="flex justify-between gap-3 py-2.5 text-sm">
                 <span>
-                  {item.name} <span className="text-cocoa/60">×{item.qty}</span>
+                  {item.name} <span className="text-navy/60">×{item.qty}</span>
                 </span>
                 <span className="shrink-0 font-semibold">{formatRupiah(item.price * item.qty)}</span>
               </li>
             ))}
           </ul>
 
-          <div className="mt-4 flex items-baseline justify-between border-t-2 border-cocoa pt-4">
+          <div className="mt-4 flex items-baseline justify-between border-t-2 border-navy pt-4">
             <span className="font-bold">Total</span>
             <span className="font-display text-2xl font-extrabold">{formatRupiah(totalPrice)}</span>
           </div>
 
-          <button type="submit" form="checkout-form" className="btn-primary mt-5 w-full">
-            Kirim Pesanan ke WhatsApp
+          <button type="submit" form="checkout-form" className="btn-primary mt-5 w-full text-lg">
+            Lanjut Pesan via WhatsApp 🚀
           </button>
-          <p className="mt-3 text-center text-xs text-cocoa/60">
+          <p className="mt-3 text-center text-xs text-navy/60">
             Pesanan dikonfirmasi setelah penjual membalas di WhatsApp.
           </p>
 
           {waUrl && (
-            <div role="status" className="mt-5 rounded-xl border-2 border-cocoa bg-sage p-4 text-sm">
+            <div role="status" className="mt-5 rounded-xl border-2 border-navy bg-sand p-4 text-sm">
               <p className="font-bold">WhatsApp sudah dibuka.</p>
               <p className="mt-1">
                 Tekan kirim di WhatsApp. Belum terbuka?{" "}
@@ -269,12 +272,13 @@ export default function Checkout() {
             </div>
           )}
 
-          <Link
-            to="/keranjang"
-            className="mt-4 block text-center text-sm font-semibold underline underline-offset-4"
+          <button
+            type="button"
+            onClick={openCart}
+            className="mt-4 block w-full text-center text-sm font-semibold underline underline-offset-4"
           >
             Ubah keranjang
-          </Link>
+          </button>
         </aside>
       </div>
     </div>

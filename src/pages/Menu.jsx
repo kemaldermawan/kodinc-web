@@ -14,19 +14,23 @@ export default function Menu() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="font-display text-4xl font-extrabold tracking-tight">Menu</h1>
-      <p className="mt-2 text-cocoa/75">
-        Tambahkan ke keranjang, jumlahnya bisa diatur di halaman keranjang.
+      <p className="mt-2 text-navy/75">
+        Pilih favoritmu, lalu atur jumlahnya di keranjang.
       </p>
 
-      <div className="-mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-2" role="group" aria-label="Filter kategori">
+      <div
+        className="-mx-4 mt-6 flex gap-2 overflow-x-auto px-4 pb-2"
+        role="group"
+        aria-label="Filter kategori"
+      >
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
             type="button"
             onClick={() => select(cat)}
             aria-pressed={active === cat}
-            className={`whitespace-nowrap rounded-full border-2 border-cocoa px-4 py-1.5 text-sm font-bold transition ${
-              active === cat ? "bg-cocoa text-cream" : "bg-white hover:bg-butter"
+            className={`whitespace-nowrap rounded-lg border-2 border-navy px-4 py-1.5 text-sm font-bold transition ${
+              active === cat ? "bg-navy text-cream shadow-hard" : "bg-cream hover:bg-sun"
             }`}
           >
             {cat}
