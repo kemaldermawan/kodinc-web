@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #fbf4e6;
+  --color-cocoa: #2a1810;
+  --color-tomato: #c23a17;
+  --color-butter: #f5c842;
+  --color-blush: #f3c9c0;
+  --color-sage: #bfd8b8;
+  --color-latte: #e3c9a8;
+  --color-sky: #bcd9e8;
+
+  --shadow-hard: 4px 4px 0 0 #2a1810;
+  --shadow-hard-sm: 2px 2px 0 0 #2a1810;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream font-sans text-cocoa antialiased;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-tomato);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn-primary,
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-cocoa px-5 py-2.5 font-bold shadow-hard-sm transition;
+    @apply active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
+  }
+  .btn-primary {
+    @apply bg-tomato text-white hover:brightness-110;
+  }
+  .btn-light {
+    @apply bg-white text-cocoa hover:bg-butter;
+  }
+  .card {
+    @apply rounded-2xl border-2 border-cocoa bg-white shadow-hard;
+  }
+  .field {
+    @apply w-full rounded-xl border-2 border-cocoa bg-white px-3.5 py-2.5 text-base placeholder:text-cocoa/40;
+  }
+}

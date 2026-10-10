@@ -1,0 +1,92 @@
+export const CATEGORIES = ["Semua", "Cookies", "Donat", "Es Coklat", "Kopi", "Dimsum"];
+
+export const CATEGORY_TONES = {
+  Cookies: "bg-butter",
+  Donat: "bg-blush",
+  "Es Coklat": "bg-sky",
+  Kopi: "bg-latte",
+  Dimsum: "bg-sage",
+};
+
+export const PRODUCTS = [
+  {
+    id: "cookies-choco",
+    name: "Choco Chip Cookies",
+    category: "Cookies",
+    description: "Pinggiran renyah, tengahnya lembut, penuh potongan coklat.",
+    price: 8000,
+    image: "/images/cookies-choco.jpg",
+  },
+  {
+    id: "cookies-redvelvet",
+    name: "Red Velvet Cookies",
+    category: "Cookies",
+    description: "Cookies red velvet dengan white chocolate chip.",
+    price: 9000,
+    image: "/images/cookies-redvelvet.jpg",
+  },
+  {
+    id: "donat-gula",
+    name: "Donat Gula",
+    category: "Donat",
+    description: "Donat empuk dengan taburan gula halus.",
+    price: 5000,
+    image: "/images/donat-gula.jpg",
+  },
+  {
+    id: "donat-coklat",
+    name: "Donat Coklat Meses",
+    category: "Donat",
+    description: "Donat empuk berselimut coklat dan meses.",
+    price: 6000,
+    image: "/images/donat-coklat.jpg",
+  },
+  {
+    id: "es-coklat",
+    name: "Es Coklat",
+    category: "Es Coklat",
+    description: "Coklat dingin yang creamy, pas buat nemenin kuliah siang.",
+    price: 12000,
+    image: "/images/es-coklat.jpg",
+  },
+  {
+    id: "es-coklat-oreo",
+    name: "Es Coklat Oreo",
+    category: "Es Coklat",
+    description: "Es coklat dengan remahan Oreo di atasnya.",
+    price: 15000,
+    image: "/images/es-coklat-oreo.jpg",
+  },
+  {
+    id: "kopi-susu",
+    name: "Es Kopi Susu",
+    category: "Kopi",
+    description: "Espresso, susu, dan gula aren dalam satu gelas dingin.",
+    price: 13000,
+    image: "/images/kopi-susu.jpg",
+  },
+  {
+    id: "americano",
+    name: "Es Americano",
+    category: "Kopi",
+    description: "Espresso dan air dingin, tanpa gula.",
+    price: 10000,
+    image: "/images/americano.jpg",
+  },
+  {
+    id: "dimsum-ayam",
+    name: "Dimsum Ayam (isi 4)",
+    category: "Dimsum",
+    description: "Dimsum ayam kukus, disajikan dengan saus.",
+    price: 15000,
+    image: "/images/dimsum-ayam.jpg",
+  },
+  {
+    id: "dimsum-udang",
+    name: "Dimsum Udang (isi 4)",
+    category: "Dimsum",
+    description: "Dimsum udang kukus yang juicy.",
+    price: 18000,
+    image: "/images/dimsum-udang.jpg",
+  },
+];
