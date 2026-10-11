@@ -12,7 +12,7 @@ export const SITE = {
   openDays: [1, 2, 3, 4, 5],
   hoursLabel: "10.00 - 15.00 WIB",
   // Ubah ke true kalau foto produk asli sudah ada di public/images/
-  usePhotos: false,
+  usePhotos: true,
   // Minimal H+N dari hari ini. Ubah ke 0 kalau boleh ambil di hari yang sama.
   minLeadDays: 1,
   // Slot jam ambil tiap 30 menit: 10:00 sampai 15:00

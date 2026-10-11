@@ -28,7 +28,7 @@ export const PRODUCTS = [
     category: "Dimsum",
     description: "Dimsum kukus klasik, disajikan dengan saus.",
     price: 12000,
-    image: "/images/dimsum-original.jpg",
+    image: "/images/dimsum-original.png",
     art: { type: "dimsum", dough: "#FFF8EA" },
   },
   {
@@ -38,7 +38,7 @@ export const PRODUCTS = [
     description: "Dimsum kukus dengan lapisan saus mentai.",
     price: 15000,
     bestSeller: true,
-    image: "/images/dimsum-mentai-original.jpg",
+    image: "/images/dimsum-mentai-original.png",
     art: { type: "dimsum", dough: "#FFF8EA", sauce: "#F28C38" },
   },
   {
@@ -47,7 +47,7 @@ export const PRODUCTS = [
     category: "Dimsum",
     description: "Dimsum kukus dengan saus mentai dan keju.",
     price: 16000,
-    image: "/images/dimsum-mentai-cheese.jpg",
+    image: "/images/dimsum-mentai-cheese.png",
     art: { type: "dimsum", dough: "#FFF8EA", sauce: "#F28C38", cheese: true },
   },
   {
@@ -56,7 +56,7 @@ export const PRODUCTS = [
     category: "Dimsum",
     description: "Dimsum goreng yang renyah dengan keju.",
     price: 24000,
-    image: "/images/dimsum-goreng-keju.jpg",
+    image: "/images/dimsum-goreng-keju.png",
     art: { type: "dimsum", dough: "#E3A13A", cheese: true, fried: true },
   },
 
@@ -67,7 +67,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Donat empuk dengan topping coklat.",
     price: 5000,
-    image: "/images/donat-coklat.jpg",
+    image: "/images/donat-coklat.png",
     art: { type: "donut", icing: "#6B3A24" },
   },
   {
@@ -76,7 +76,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Donat empuk dengan topping strawberry.",
     price: 5000,
-    image: "/images/donat-strawberry.jpg",
+    image: "/images/donat-strawberry.png",
     art: { type: "donut", icing: "#F27A9B", sprinkles: ["#FFF8EA", "#FBBF24"] },
   },
   {
@@ -85,7 +85,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Donat empuk dengan taburan keju.",
     price: 5000,
-    image: "/images/donat-keju.jpg",
+    image: "/images/donat-keju.png",
     art: { type: "donut", icing: "#FFD966", sprinkles: ["#F2A900"] },
   },
   {
@@ -94,7 +94,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Perpaduan topping coklat dan keju di atas donat empuk.",
     price: 5000,
-    image: "/images/donat-coklat-keju.jpg",
+    image: "/images/donat-coklat-keju.png",
     art: { type: "donut", icing: "#6B3A24", sprinkles: ["#FFD966"] },
   },
     {
@@ -103,7 +103,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Donat empuk dengan taburan susu bubuk yang lembut.",
     price: 5000,
-    image: "/images/donat-milky-snow.jpg",
+    image: "/images/donat-milky-snow.png",
     art: { type: "donut", icing: "#FFFDF6", sprinkles: ["#BFD7E3"] },
   },
   {
@@ -112,7 +112,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Cookies choco chip original, renyah di pinggir dan lembut di tengah.",
     price: 8000,
-    image: "/images/cookies-classic.jpg",
+    image: "/images/cookies-classic.png",
     art: { type: "cookie", dough: "#D9A15B", chip: "#5B3220" },
   },
   {
@@ -121,7 +121,7 @@ export const PRODUCTS = [
     category: "Donat & Cookies",
     description: "Cookies red velvet yang lembut.",
     price: 8000,
-    image: "/images/cookies-red-velvet.jpg",
+    image: "/images/cookies-red-velvet.png",
     art: { type: "cookie", dough: "#B3202B", chip: "#FFF8EA" },
   },
 
@@ -133,7 +133,7 @@ export const PRODUCTS = [
     description: "Es coklat yang lembut dan creamy.",
     price: 5000,
     bestSeller: true,
-    image: "/images/choco-dreamy.jpg",
+    image: "/images/choco-dreamy.png",
     art: { type: "drink", layers: ["#8A4B2E", "#5B3220"], whip: true },
   },
   {
@@ -143,7 +143,7 @@ export const PRODUCTS = [
     description: "Es kopi susu yang creamy.",
     price: 10000,
     bestSeller: true,
-    image: "/images/coffee-creamy.jpg",
+    image: "/images/coffee-creamy.png",
     art: { type: "drink", layers: ["#F6E6C8", "#7A4A2A"] },
   },
 
@@ -155,7 +155,7 @@ export const PRODUCTS = [
     description: "Segera hadir.",
     price: null,
     comingSoon: true,
-    image: "/images/donat-oreo.jpg",
+    image: "/images/donat-oreo.png",
     art: { type: "donut", icing: "#2B2B3A", sprinkles: ["#FFF8EA"] },
   },
 ];
