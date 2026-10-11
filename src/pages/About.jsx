@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import FoodIllustration from "../components/FoodIllustration";
 import { CalendarIcon, ClockIcon, PinIcon } from "../components/Icons";
 import Marquee from "../components/Marquee";
-import Starburst from "../components/Starburst";
+import SocialIcon from "../components/SocialIcons";
 import { SITE } from "../config/site";
 import { CATEGORY_INFO } from "../data/products";
 
@@ -18,24 +18,24 @@ const FLAVORS = [
     sub: "Sweet treats",
     text: "Donat dan cookies buat nemenin hari-hari sibukmu.",
     cat: "Donat & Cookies",
-    tone: "bg-sun",
     tilt: "md:-rotate-1",
+    bg: "bg-brand text-cream", // Merah (bg-brand) dengan teks cream
   },
   {
     title: "Gurih",
     sub: "Savory snacks",
     text: "Dimsum dengan pilihan saus yang bikin nagih.",
     cat: "Dimsum",
-    tone: "bg-cream",
     tilt: "",
+    bg: "bg-sun text-navy", // Kuning (bg-sun) dengan teks navy
   },
   {
     title: "Segar",
     sub: "Refreshing drinks",
     text: "Es coklat dan es kopi yang creamy, pas buat mood apa pun.",
     cat: "Minuman",
-    tone: "bg-sun",
     tilt: "md:rotate-1",
+    bg: "bg-navy text-cream", // Biru / Navy (bg-navy) dengan teks cream
   },
 ];
 
@@ -92,17 +92,21 @@ export default function About() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-md">
-          <Starburst
-            fill="#FBBF24"
-            textClass="text-navy"
-            className="absolute -right-3 -top-8 z-10 size-24 rotate-12 motion-safe:animate-pulse-soft sm:size-28"
-          >
-            <span className="block text-xl sm:text-2xl">OPEN</span>
-            <span className="block text-2xl sm:text-3xl">PO!</span>
-          </Starburst>
+        <div className="mx-auto w-full max-w-md">
+          <div className="relative z-10 -mb-3 flex justify-center">
+            <Link
+              to="/menu"
+              aria-label="Open PO, lihat menu"
+              className="inline-flex -rotate-6 items-center gap-2 rounded-xl border-2 border-navy bg-sun px-5 py-2 font-display text-3xl font-extrabold leading-none shadow-hard-lg transition duration-200 hover:rotate-0 hover:scale-105 active:scale-95"
+            >
+              OPEN
+              <span className="rounded-md border-2 border-navy bg-brand px-2 py-1 text-cream">
+                PO!
+              </span>
+            </Link>
+          </div>
 
-          <div className="grid grid-cols-3 gap-3 pt-8">
+          <div className="grid grid-cols-3 gap-3">
             {POLAROIDS.map(({ cat, label, style }) => (
               <figure
                 key={cat}
@@ -135,7 +139,7 @@ export default function About() {
         <p className="mt-2 text-navy/75">Pilih sesuai mood-mu hari ini.</p>
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {FLAVORS.map(({ title, sub, text, cat, tone, tilt }) => (
+          {FLAVORS.map(({ title, sub, text, cat, tilt, bg }) => (
             <article
               key={title}
               className={`card overflow-hidden transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${tilt}`}
@@ -145,10 +149,10 @@ export default function About() {
                 bg={CATEGORY_INFO[cat].bg}
                 className="h-36 border-b-2 border-navy"
               />
-              <div className={`p-5 ${tone}`}>
-                <p className="text-xs font-bold uppercase tracking-widest text-navy/70">{sub}</p>
+              <div className={`p-5 ${bg}`}>
+                <p className="text-xs font-bold uppercase tracking-widest opacity-80">{sub}</p>
                 <h3 className="font-display text-3xl font-extrabold">{title}</h3>
-                <p className="mt-2 text-navy/80">{text}</p>
+                <p className="mt-2 opacity-90">{text}</p>
               </div>
             </article>
           ))}
@@ -157,7 +161,10 @@ export default function About() {
 
       {/* Info pickup */}
       <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="rounded-3xl border-4 border-navy bg-sun p-6 shadow-pop sm:p-8" style={HALFTONE}>
+        <div
+          className="rounded-3xl border-4 border-navy bg-sun p-6 shadow-pop sm:p-8"
+          style={HALFTONE}
+        >
           <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
             Ambil di mana & kapan?
           </h2>
@@ -192,24 +199,17 @@ export default function About() {
         </h2>
 
         <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-          {SITE.socials.map((s, i) => {
-            const primary = i === 0;
+          {SITE.socials.map((s) => {
             return (
-              <li key={s.label} className={primary ? "sm:col-span-2" : ""}>
+              <li key={s.label}>
                 <a
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`card group flex items-center gap-4 p-4 transition duration-200 hover:-translate-y-1 hover:bg-sun hover:shadow-hard-lg ${
-                    primary ? "bg-sun" : ""
-                  }`}
+                  className="card group flex items-center gap-4 p-4 transition duration-200 hover:-translate-y-1 hover:bg-sun hover:shadow-hard-lg"
                 >
-                  <span
-                    className={`grid size-12 shrink-0 place-items-center rounded-xl border-2 border-navy font-display text-xl font-extrabold ${
-                      primary ? "bg-cream" : "bg-brand text-cream"
-                    }`}
-                  >
-                    {s.label[0]}
+                  <span className="grid size-12 shrink-0 place-items-center rounded-xl border-2 border-navy bg-navy text-cream transition duration-200 group-hover:bg-brand">
+                    <SocialIcon name={s.label} className="size-6" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block font-display text-lg font-extrabold leading-tight">

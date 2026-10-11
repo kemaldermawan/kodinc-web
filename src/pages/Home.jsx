@@ -78,11 +78,11 @@ const FAQS = [
   },
 ];
 
-// Tata letak kartu Best Seller: selang-seling kiri/kanan, tanpa saling menimpa
+// Zig-zag bertingkat: kartu 2 turun di kolom kanan, kartu 3 naik merapat ke kartu 1
 const FLOAT_STYLES = [
-  "-rotate-1 sm:mr-32 [animation-delay:-1s]",
-  "rotate-1 sm:ml-10 [animation-delay:-2s]",
-  "-rotate-1 sm:mr-12 [animation-delay:-3s]",
+  "-rotate-2 [animation-delay:-1s]",
+  "rotate-2 sm:mt-12 [animation-delay:-2s]",
+  "rotate-1 sm:-mt-10 [animation-delay:-3s]",
 ];
 
 const HALFTONE = {
@@ -92,24 +92,24 @@ const HALFTONE = {
 
 function FloatingCard({ product, className = "" }) {
   return (
-    <div className={`motion-safe:animate-bob ${className}`}>
-      <article className="card group flex overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg">
-        <div className="relative w-28 shrink-0 overflow-hidden border-r-2 border-navy sm:w-32">
+    <div className={`mx-auto w-full max-w-[13rem] motion-safe:animate-bob ${className}`}>
+      <article className="card group overflow-hidden transition duration-200 hover:scale-105 hover:shadow-hard-lg">
+        <div className="relative aspect-[4/3] overflow-hidden border-b-2 border-navy">
           <ProductImage
             product={product}
             className="absolute inset-0 size-full transition duration-300 group-hover:scale-110"
           />
           <ProductTags product={product} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col justify-center p-3">
-          <h3 className="font-display text-lg font-bold leading-tight">{product.name}</h3>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="price-badge">{formatRupiah(product.price)}</span>
+        <div className="p-2">
+          <h3 className="font-display text-sm font-bold leading-tight">{product.name}</h3>
+          <div className="mt-1.5 flex flex-wrap items-center justify-between gap-1">
+            <span className="price-badge text-xs px-2 py-0.5">{formatRupiah(product.price)}</span>
             <AddToCartButton
               productId={product.id}
               label="+ Tambah"
               addedLabel="✓ Masuk"
-              className="btn-primary px-3 py-1.5 text-sm"
+              className="btn-primary px-2 py-1 text-xs"
             />
           </div>
         </div>
@@ -191,29 +191,14 @@ export default function Home() {
         </div>
 
         {bestSellers.length > 0 && (
-          <div className="relative" aria-label="Menu Best Seller">
-            <div className="relative z-10 mb-4 flex justify-end sm:absolute sm:right-0 sm:top-0 sm:mb-0">
-              <Link
-                to="/menu"
-                aria-label="Open PO, lihat menu"
-                className="grid size-24 rotate-12 place-items-center rounded-full border-2 border-navy bg-brand text-center font-display font-extrabold leading-none text-cream shadow-hard-lg ring-4 ring-sun transition duration-200 hover:rotate-0 hover:scale-110 active:scale-95 motion-safe:animate-pulse-soft sm:size-28"
-              >
-                <span>
-                  <span className="block text-2xl sm:text-3xl">OPEN</span>
-                  <span className="block text-2xl sm:text-3xl">PO!</span>
-                </span>
-              </Link>
-            </div>
-
-            <div className="flex flex-col gap-5">
-              {bestSellers.map((product, i) => (
-                <FloatingCard
-                  key={product.id}
-                  product={product}
-                  className={FLOAT_STYLES[i % FLOAT_STYLES.length]}
-                />
-              ))}
-            </div>
+          <div className="grid gap-6 sm:grid-cols-2 sm:gap-x-5" aria-label="Menu Best Seller">
+            {bestSellers.map((product, i) => (
+              <FloatingCard
+                key={product.id}
+                product={product}
+                className={FLOAT_STYLES[i % FLOAT_STYLES.length]}
+              />
+            ))}
           </div>
         )}
       </section>
@@ -268,42 +253,41 @@ export default function Home() {
       {/* Serba Rp5K */}
       {savingProducts.length > 0 && (
         <section className="mx-auto max-w-6xl px-4 py-14">
-          <div className="relative">
-            <Starburst className="absolute -top-10 right-2 z-10 size-28 rotate-12 motion-safe:animate-pulse-soft sm:right-8 sm:size-36">
-              <span className="block text-lg sm:text-2xl">SERBA</span>
-              <span className="block text-3xl sm:text-5xl">Rp5K</span>
-            </Starburst>
+          <div className="overflow-hidden rounded-3xl border-4 border-navy bg-sun shadow-pop">
+            <Marquee
+              items={["Serba Rp5K", "Jajan Hemat", "Pre-Order Sekarang"]}
+              className="border-b-4 border-navy bg-navy py-2 text-cream"
+            />
 
-            <div className="overflow-hidden rounded-3xl border-4 border-navy bg-sun shadow-pop">
-              <Marquee
-                items={["Serba Rp5K", "Jajan Hemat", "Pre-Order Sekarang"]}
-                className="border-b-4 border-navy bg-navy py-2 text-cream"
-              />
+            <div className="p-5 sm:p-8" style={HALFTONE}>
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-5">
+                <Starburst className="size-28 shrink-0 -rotate-6 motion-safe:animate-pulse-soft sm:size-36">
+                  <span className="block text-lg sm:text-2xl">SERBA</span>
+                  <span className="block text-3xl sm:text-5xl">Rp5K</span>
+                </Starburst>
 
-              <div className="p-5 pt-8 sm:p-8" style={HALFTONE}>
-                <div className="flex flex-wrap items-end justify-between gap-4">
-                  <div>
-                    <h2 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
-                      Jajan Hemat,
-                      <br />
-                      <span className="inline-block -rotate-1 rounded-lg border-2 border-navy bg-cream px-2 shadow-hard">
-                        Tetep Puas!
-                      </span>
-                    </h2>
-                    <p className="mt-4 max-w-md font-semibold">
-                      Pilihan jajan yang ramah di dompet. Tinggal pilih, tambah, dan pesan.
-                    </p>
-                  </div>
-                  <Link to="/menu" className="btn-dark text-sm">
-                    Lihat semua menu →
-                  </Link>
+                <div className="min-w-0 flex-1 basis-64">
+                  <h2 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+                    Jajan Hemat,
+                    <br />
+                    <span className="inline-block -rotate-1 rounded-lg border-2 border-navy bg-cream px-2 shadow-hard">
+                      Tetep Puas!
+                    </span>
+                  </h2>
+                  <p className="mt-4 max-w-md font-semibold">
+                    Pilihan jajan yang ramah di dompet. Tinggal pilih, tambah, dan pesan.
+                  </p>
                 </div>
 
-                <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-                  {savingProducts.map((product) => (
-                    <PromoCard key={product.id} product={product} />
-                  ))}
-                </div>
+                <Link to="/menu" className="btn-dark text-sm">
+                  Lihat semua menu →
+                </Link>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                {savingProducts.map((product) => (
+                  <PromoCard key={product.id} product={product} />
+                ))}
               </div>
             </div>
           </div>
