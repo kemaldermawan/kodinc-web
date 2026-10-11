@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { CartIcon } from "./Icons";
 
 const LINKS = [
   { to: "/", label: "Beranda", end: true },
@@ -40,11 +41,15 @@ export default function Navbar() {
         <button
           type="button"
           onClick={openCart}
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-navy bg-cream px-3.5 py-1.5 text-sm font-bold text-navy shadow-hard transition hover:bg-sun"
+          className="inline-flex items-center gap-2 rounded-lg border-2 border-navy bg-cream px-3.5 py-1.5 text-sm font-bold text-navy shadow-hard transition duration-200 hover:-translate-y-0.5 hover:bg-sun hover:shadow-hard-lg active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
         >
+          <CartIcon className="size-5" />
           Keranjang
           {totalItems > 0 && (
-            <span className="min-w-5 rounded-md bg-brand px-1.5 text-center text-xs text-cream">
+            <span
+              key={totalItems}
+              className="min-w-5 animate-pop rounded-md bg-brand px-1.5 text-center text-xs text-cream"
+            >
               {totalItems}
             </span>
           )}

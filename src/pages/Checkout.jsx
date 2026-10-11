@@ -1,18 +1,23 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import DatePicker from "../components/DatePicker";
+import ProductImage from "../components/ProductImage";
+import TimeSlotPicker from "../components/TimeSlotPicker";
 import { PAYMENT_METHODS, SITE } from "../config/site";
 import { useCart } from "../context/CartContext";
-import { formatLongDate, formatRupiah, minPickupDate } from "../utils/format";
+import { formatRupiah, minPickupDate, parseISODate } from "../utils/format";
 import { buildOrderMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 
-const INITIAL_FORM = { name: "", notes: "", pickupDate: "", pickupTime: "", payment: "" };
+const INITIAL_FORM = { name: "", pickupDate: "", pickupTime: "", payment: "", notes: "" };
 
-function validate(form, minDate) {
+function validate(form) {
   const errors = {};
   if (form.name.trim().length < 2) errors.name = "Isi nama lengkap kamu.";
+
   if (!form.pickupDate) errors.pickupDate = "Pilih tanggal pengambilan.";
-  else if (form.pickupDate < minDate)
-    errors.pickupDate = `Paling cepat ${formatLongDate(minDate)}.`;
+  else if (!SITE.openDays.includes(parseISODate(form.pickupDate).getDay()))
+    errors.pickupDate = `Pickup hanya tersedia ${SITE.DaysLabel}.`;
+
   if (!form.pickupTime) errors.pickupTime = "Pilih jam pengambilan.";
   if (!form.payment) errors.payment = "Pilih metode pembayaran.";
   return errors;
@@ -27,16 +32,21 @@ function Section({ title, children }) {
   );
 }
 
-function Field({ id, label, hint, error, children }) {
+function Field({ id, label, plain = false, hint, error, children }) {
+  const labelClass = "mb-1.5 block text-sm font-bold";
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-bold">
-        {label}
-      </label>
+      {plain ? (
+        <p className={labelClass}>{label}</p>
+      ) : (
+        <label htmlFor={id} className={labelClass}>
+          {label}
+        </label>
+      )}
       {children}
       {hint && !error && <p className="mt-1 text-sm text-navy/60">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold text-brand">
+        <p id={`${id}-error`} role="alert" className="mt-2 text-sm font-semibold text-brand">
           {error}
         </p>
       )}
@@ -53,15 +63,16 @@ export default function Checkout() {
   const [errors, setErrors] = useState({});
   const [waUrl, setWaUrl] = useState("");
 
-  const setField = (key) => (e) => {
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+  const setValue = (key, value) => {
+    setForm((f) => ({ ...f, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
+  const setField = (key) => (e) => setValue(key, e.target.value);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    const nextErrors = validate(form, minDate);
+    const nextErrors = validate(form);
     setErrors(nextErrors);
 
     const firstError = Object.keys(nextErrors)[0];
@@ -105,6 +116,9 @@ export default function Checkout() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="font-display text-4xl font-extrabold tracking-tight">Checkout</h1>
+      <p className="mt-2 text-navy/75">
+        Isi data lengkap di bawah ini, lalu konfirmasi dan kirim pesanan ke WhatsApp.
+      </p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_400px] lg:items-start">
         <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-6">
@@ -122,56 +136,36 @@ export default function Checkout() {
                 className="field"
               />
             </Field>
-            <Field
-              id="field-notes"
-              label="Catatan khusus (opsional)"
-              hint="Misalnya: es-nya dikit aja, saus dipisah."
-            >
-              <textarea
-                id="field-notes"
-                rows={3}
-                maxLength={300}
-                value={form.notes}
-                onChange={setField("notes")}
-                className="field resize-none"
-              />
-            </Field>
           </Section>
 
           <Section title="2. Pengambilan pesanan">
             <p className="rounded-xl border-2 border-dashed border-navy px-4 py-3 text-sm">
-              Pickup Point: <strong>{SITE.pickupLocation}</strong> • Jam ambil{" "}
+              Pickup Point: <strong>{SITE.pickupLocation}</strong> • {SITE.DaysLabel} •{" "}
               <strong>{SITE.hoursLabel}</strong>
             </p>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field id="field-pickupDate" label="Tanggal" error={errors.pickupDate}>
-                <input
+
+            <div className="grid gap-5 sm:grid-cols-[19rem_1fr]">
+              <Field id="field-pickupDate" label="Tanggal" plain error={errors.pickupDate}>
+                <DatePicker
                   id="field-pickupDate"
-                  type="date"
-                  min={minDate}
                   value={form.pickupDate}
-                  onChange={setField("pickupDate")}
-                  aria-invalid={Boolean(errors.pickupDate)}
-                  aria-describedby={errors.pickupDate ? "field-pickupDate-error" : undefined}
-                  className="field"
+                  min={minDate}
+                  openDays={SITE.openDays}
+                  onChange={(v) => setValue("pickupDate", v)}
+                  invalid={Boolean(errors.pickupDate)}
+                  describedBy={errors.pickupDate ? "field-pickupDate-error" : undefined}
                 />
               </Field>
-              <Field id="field-pickupTime" label="Jam" error={errors.pickupTime}>
-                <select
+
+              <Field id="field-pickupTime" label="Jam" plain error={errors.pickupTime}>
+                <TimeSlotPicker
                   id="field-pickupTime"
                   value={form.pickupTime}
-                  onChange={setField("pickupTime")}
-                  aria-invalid={Boolean(errors.pickupTime)}
-                  aria-describedby={errors.pickupTime ? "field-pickupTime-error" : undefined}
-                  className="field"
-                >
-                  <option value="">Pilih jam</option>
-                  {SITE.pickupSlots.map((t) => (
-                    <option key={t} value={t}>
-                      {t} WIB
-                    </option>
-                  ))}
-                </select>
+                  slots={SITE.pickupSlots}
+                  onChange={(v) => setValue("pickupTime", v)}
+                  invalid={Boolean(errors.pickupTime)}
+                  describedBy={errors.pickupTime ? "field-pickupTime-error" : undefined}
+                />
               </Field>
             </div>
           </Section>
@@ -183,7 +177,7 @@ export default function Checkout() {
                 {PAYMENT_METHODS.map((m, i) => (
                   <label
                     key={m.id}
-                    className="flex cursor-pointer gap-3 rounded-xl border-2 border-navy bg-cream p-3.5 transition has-[:checked]:bg-sun"
+                    className="flex cursor-pointer gap-3 rounded-xl border-2 border-navy bg-cream p-3.5 transition duration-200 hover:-translate-y-0.5 has-[:checked]:bg-sun"
                   >
                     <input
                       id={i === 0 ? "field-payment" : undefined}
@@ -208,7 +202,7 @@ export default function Checkout() {
               )}
             </fieldset>
 
-            {form.payment === "qris-now" && (
+            {form.payment === "qris" && (
               <div className="rounded-xl border-2 border-dashed border-navy p-4 text-center">
                 <img
                   src="/qris.png"
@@ -223,23 +217,46 @@ export default function Checkout() {
               </div>
             )}
           </Section>
+
+          <Section title="4. Catatan khusus">
+            <Field
+              id="field-notes"
+              label="Catatan (opsional)"
+              hint="Misalnya: es-nya dikit aja, saus dipisah."
+            >
+              <textarea
+                id="field-notes"
+                rows={3}
+                maxLength={300}
+                value={form.notes}
+                onChange={setField("notes")}
+                className="field resize-none"
+              />
+            </Field>
+          </Section>
         </form>
 
         <aside className="card p-5 lg:sticky lg:top-24">
           <h2 className="font-display text-xl font-extrabold">Ringkasan pesanan</h2>
 
-          <ul className="mt-4 divide-y divide-navy/15">
+          <ul className="mt-2 divide-y divide-navy/15">
             {items.map((item) => (
-              <li key={item.id} className="flex justify-between gap-3 py-2.5 text-sm">
-                <span>
-                  {item.name} <span className="text-navy/60">×{item.qty}</span>
-                </span>
-                <span className="shrink-0 font-semibold">{formatRupiah(item.price * item.qty)}</span>
+              <li key={item.id} className="flex items-center gap-3 py-3">
+                <div className="relative size-14 shrink-0 overflow-hidden rounded-lg border-2 border-navy">
+                  <ProductImage product={item} className="absolute inset-0 size-full" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold leading-tight">{item.name}</p>
+                  <p className="text-sm text-navy/60">
+                    {formatRupiah(item.price)} × {item.qty}
+                  </p>
+                </div>
+                <p className="shrink-0 font-semibold">{formatRupiah(item.price * item.qty)}</p>
               </li>
             ))}
           </ul>
 
-          <div className="mt-4 flex items-baseline justify-between border-t-2 border-navy pt-4">
+          <div className="mt-2 flex items-baseline justify-between border-t-2 border-navy pt-4">
             <span className="font-bold">Total</span>
             <span className="font-display text-2xl font-extrabold">{formatRupiah(totalPrice)}</span>
           </div>

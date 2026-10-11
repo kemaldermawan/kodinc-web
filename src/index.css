@@ -10,13 +10,19 @@
   --color-cream: #fef0d5; /* background, card, input */
 
   /* Aksen */
-  --color-sun: #fbbf24; /* amber: CTA utama & Best Seller */
+  --color-sun: #fbbf24; /* amber: CTA utama, Best Seller, stiker */
   --color-sand: #f6dcab;
 
   --shadow-hard: 3px 3px 0 0 #012f49;
   --shadow-hard-lg: 5px 5px 0 0 #012f49;
+  --shadow-pop: 8px 8px 0 0 #012f49;
 
   --animate-bob: bob 4s ease-in-out infinite;
+  --animate-pop: pop 0.35s ease-out;
+  --animate-fade-in: fade-in 0.25s ease-out;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  --animate-marquee: marquee 20s linear infinite;
+
   @keyframes bob {
     0%,
     100% {
@@ -24,6 +30,44 @@
     }
     50% {
       transform: translateY(-10px);
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(0.6);
+    }
+    60% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.07);
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
     }
   }
 }
@@ -50,7 +94,7 @@
   .btn-primary,
   .btn-dark,
   .btn-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-navy px-5 py-2.5 font-bold shadow-hard transition;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-navy px-5 py-2.5 font-bold shadow-hard transition duration-200;
     @apply hover:-translate-y-0.5 hover:shadow-hard-lg active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
   }
   /* CTA utama (amber) */
@@ -71,5 +115,16 @@
   }
   .price-badge {
     @apply inline-block -rotate-2 rounded-md border-2 border-navy bg-brand px-2.5 py-0.5 font-display text-base font-extrabold text-cream;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

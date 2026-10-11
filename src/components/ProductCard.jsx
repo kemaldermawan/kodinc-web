@@ -1,29 +1,24 @@
 import { useCart } from "../context/CartContext";
 import { formatRupiah } from "../utils/format";
+import AddToCartButton from "./AddToCartButton";
 import ProductImage from "./ProductImage";
+import ProductTags from "./ProductTags";
 
 export default function ProductCard({ product }) {
-  const { addItem, getQty } = useCart();
+  const { getQty } = useCart();
   const qty = getQty(product.id);
   const soon = Boolean(product.comingSoon);
 
   return (
-    <article className="card flex overflow-hidden sm:flex-col">
-      <div className="relative w-32 shrink-0 border-r-2 border-navy sm:aspect-[4/3] sm:w-full sm:border-b-2 sm:border-r-0">
+    <article className="card group flex overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg sm:flex-col">
+      <div className="relative w-32 shrink-0 overflow-hidden border-r-2 border-navy sm:aspect-[4/3] sm:w-full sm:border-b-2 sm:border-r-0">
         <ProductImage
           product={product}
-          className={`absolute inset-0 size-full ${soon ? "grayscale" : ""}`}
+          className={`absolute inset-0 size-full transition duration-300 group-hover:scale-110 ${
+            soon ? "grayscale" : ""
+          }`}
         />
-        {product.bestSeller && (
-          <span className="absolute left-2 top-2 rounded-md border-2 border-navy bg-sun px-1.5 py-0.5 text-[11px] font-extrabold sm:text-xs">
-            ⭐ Best Seller
-          </span>
-        )}
-        {soon && (
-          <span className="absolute left-2 top-2 rounded-md border-2 border-navy bg-brand px-1.5 py-0.5 text-[11px] font-extrabold text-cream sm:text-xs">
-            Coming soon
-          </span>
-        )}
+        <ProductTags product={product} />
         {!soon && qty > 0 && (
           <span className="absolute bottom-2 left-2 rounded-md border-2 border-navy bg-navy px-1.5 py-0.5 text-[11px] font-bold text-cream sm:text-xs">
             Keranjang ×{qty}
@@ -46,13 +41,10 @@ export default function ProductCard({ product }) {
           ) : (
             <>
               <span className="price-badge">{formatRupiah(product.price)}</span>
-              <button
-                type="button"
-                onClick={() => addItem(product.id)}
+              <AddToCartButton
+                productId={product.id}
                 className="btn-dark mt-3 w-full px-4 py-2 text-sm"
-              >
-                Tambah ke Keranjang
-              </button>
+              />
             </>
           )}
         </div>

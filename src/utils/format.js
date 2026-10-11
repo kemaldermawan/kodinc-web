@@ -8,9 +8,16 @@ const rupiah = new Intl.NumberFormat("id-ID", {
 export const formatRupiah = (amount) => rupiah.format(amount).replace(/\s/g, "");
 
 // "2026-10-12" → Date lokal (hindari bug zona waktu dari new Date("YYYY-MM-DD"))
-function parseISODate(iso) {
+export function parseISODate(iso) {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d);
+}
+
+export function toISODate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 export function formatLongDate(iso) {
@@ -20,13 +27,6 @@ export function formatLongDate(iso) {
     month: "long",
     year: "numeric",
   }).format(parseISODate(iso));
-}
-
-function toISODate(date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
 }
 
 export function minPickupDate(leadDays = 1) {

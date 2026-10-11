@@ -1,54 +1,116 @@
 import { Link } from "react-router-dom";
+import AddToCartButton from "../components/AddToCartButton";
 import FoodIllustration from "../components/FoodIllustration";
+import { CalendarIcon, CartIcon, ChatIcon, ClockIcon, PinIcon, PlusIcon } from "../components/Icons";
+import Marquee from "../components/Marquee";
 import ProductImage from "../components/ProductImage";
+import ProductTags from "../components/ProductTags";
+import Starburst from "../components/Starburst";
 import { SITE } from "../config/site";
-import { useCart } from "../context/CartContext";
 import { CATEGORIES, CATEGORY_INFO, PRODUCTS } from "../data/products";
 import { formatRupiah } from "../utils/format";
+import { getSavingBadge } from "../utils/promo";
 
-const PERKS = [
+const INFO_CARDS = [
   {
-    title: "Ambil di titik pickup",
-    text: `Ambil langsung di ${SITE.pickupLocation}. Tanpa ongkir, tanpa nunggu kurir.`,
+    label: "Hari Operasional",
+    value: SITE.DaysLabel,
+    Icon: CalendarIcon,
+    style: "bg-brand text-cream -rotate-2",
   },
   {
-    title: "Pilih jam ambil sendiri",
-    text: `Atur tanggal dan jam ambil di rentang ${SITE.hoursLabel}.`,
+    label: "Jam Operasional",
+    value: SITE.hoursLabel,
+    Icon: ClockIcon,
+    style: "bg-sun text-navy rotate-1",
   },
   {
-    title: "Bayar sesuai gayamu",
-    text: "QRIS di muka, QRIS saat ambil, atau cash.",
-  },
-  {
-    title: "Langsung ke penjual",
-    text: "Pesanan terkirim rapi lewat WhatsApp, jadi gampang kalau mau tanya atau ubah.",
+    label: "Titik Pickup",
+    value: SITE.pickupArea,
+    Icon: PinIcon,
+    style: "bg-navy text-cream -rotate-1",
   },
 ];
 
-function FloatingCard({ product, className }) {
-  const { addItem, getQty } = useCart();
-  const qty = getQty(product.id);
+const STEPS = [
+  {
+    title: "Pilih Menu",
+    text: "Tambahkan jajanan favoritmu ke keranjang. Jumlahnya bisa diubah kapan saja.",
+    Icon: CartIcon,
+  },
+  {
+    title: "Atur Jadwal Pickup",
+    text: `Pilih tanggal dan jam ambil di ${SITE.pickupArea}, ${SITE.DaysLabel}, pukul ${SITE.hoursLabel}.`,
+    Icon: CalendarIcon,
+  },
+  {
+    title: "Kirim Pesanan via WA",
+    text: "Pesananmu dirangkum otomatis dan terkirim ke WhatsApp penjual. Tinggal tunggu konfirmasi.",
+    Icon: ChatIcon,
+  },
+];
 
+const LEAD_TEXT =
+  SITE.minLeadDays > 0
+    ? `Pesan minimal ${SITE.minLeadDays} hari sebelum tanggal ambil, ya.`
+    : "Kamu bisa pesan untuk hari yang sama selama masih dalam jam operasional.";
+
+const FAQS = [
+  {
+    q: "Gimana cara pre-order di Kodinc?",
+    a: "Pilih menu, masukkan ke keranjang, lalu isi nama, tanggal, dan jam pickup di halaman checkout. Pesananmu otomatis terangkum dan terkirim lewat WhatsApp. Pesanan dianggap masuk setelah kami balas di WhatsApp.",
+  },
+  {
+    q: "Kapan aja jam ambil pesanan?",
+    a: `Pickup dibuka ${SITE.DaysLabel}, pukul ${SITE.hoursLabel}, di ${SITE.pickupLocation}. Kamu bisa memilih jam ambil dalam rentang itu saat checkout.`,
+  },
+  {
+    q: "Paling lambat kapan harus pesan?",
+    a: LEAD_TEXT,
+  },
+  {
+    q: "Pilihan pembayarannya apa aja?",
+    a: "Ada dua: QRIS dan Cash / Tunai. Kalau pilih QRIS, kirim bukti pembayaran lewat WhatsApp. Kalau Cash, bayar langsung saat pesanan diambil.",
+  },
+  {
+    q: "Mau nambahin catatan khusus, bisa?",
+    a: "Bisa. Isi kolom Catatan Khusus di bagian paling bawah form checkout, misalnya minta saus dipisah atau es-nya dikit.",
+  },
+];
+
+// Tata letak kartu Best Seller: selang-seling kiri/kanan, tanpa saling menimpa
+const FLOAT_STYLES = [
+  "-rotate-1 sm:mr-32 [animation-delay:-1s]",
+  "rotate-1 sm:ml-10 [animation-delay:-2s]",
+  "-rotate-1 sm:mr-12 [animation-delay:-3s]",
+];
+
+const HALFTONE = {
+  backgroundImage: "radial-gradient(rgb(1 47 73 / 0.16) 2px, transparent 2px)",
+  backgroundSize: "16px 16px",
+};
+
+function FloatingCard({ product, className = "" }) {
   return (
-    <div className={`w-56 motion-safe:animate-bob sm:w-60 ${className}`}>
-      <article className="card overflow-hidden transition hover:scale-105 hover:shadow-hard-lg">
-        <div className="relative aspect-[4/3] border-b-2 border-navy">
-          <ProductImage product={product} className="absolute inset-0 size-full" />
-          <span className="absolute left-2 top-2 rounded-md border-2 border-navy bg-sun px-1.5 py-0.5 text-xs font-extrabold">
-            ⭐ Best Seller
-          </span>
+    <div className={`motion-safe:animate-bob ${className}`}>
+      <article className="card group flex overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg">
+        <div className="relative w-28 shrink-0 overflow-hidden border-r-2 border-navy sm:w-32">
+          <ProductImage
+            product={product}
+            className="absolute inset-0 size-full transition duration-300 group-hover:scale-110"
+          />
+          <ProductTags product={product} />
         </div>
-        <div className="p-3">
+        <div className="flex min-w-0 flex-1 flex-col justify-center p-3">
           <h3 className="font-display text-lg font-bold leading-tight">{product.name}</h3>
-          <div className="mt-2 flex items-center justify-between gap-2">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="price-badge">{formatRupiah(product.price)}</span>
-            <button
-              type="button"
-              onClick={() => addItem(product.id)}
+            <AddToCartButton
+              productId={product.id}
+              label="+ Tambah"
+              addedLabel="✓ Masuk"
               className="btn-primary px-3 py-1.5 text-sm"
-            >
-              {qty > 0 ? `+1 (${qty})` : "+ Tambah"}
-            </button>
+            />
           </div>
         </div>
       </article>
@@ -56,8 +118,46 @@ function FloatingCard({ product, className }) {
   );
 }
 
+function PromoCard({ product }) {
+  return (
+    <article className="card group flex flex-col overflow-hidden transition duration-200 odd:-rotate-1 even:rotate-1 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg">
+      <div className="relative aspect-square overflow-hidden border-b-2 border-navy">
+        <ProductImage
+          product={product}
+          className="absolute inset-0 size-full transition duration-300 group-hover:scale-110"
+        />
+        <ProductTags product={product} />
+      </div>
+      <div className="flex flex-1 flex-col p-3">
+        <h3 className="font-display text-base font-bold leading-tight">{product.name}</h3>
+        <span className="price-badge mt-2 self-start">{formatRupiah(product.price)}</span>
+        <AddToCartButton
+          productId={product.id}
+          label="+ Tambah"
+          className="btn-dark mt-3 w-full px-3 py-1.5 text-sm"
+        />
+      </div>
+    </article>
+  );
+}
+
+function FaqItem({ q, a }) {
+  return (
+    <details name="faq" className="card group">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-display text-lg font-bold [&::-webkit-details-marker]:hidden">
+        {q}
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg border-2 border-navy bg-sun transition duration-200 group-open:rotate-45 group-open:bg-brand group-open:text-cream">
+          <PlusIcon className="size-4" />
+        </span>
+      </summary>
+      <p className="animate-fade-in px-4 pb-4 text-navy/80">{a}</p>
+    </details>
+  );
+}
+
 export default function Home() {
-  const [first, second] = PRODUCTS.filter((p) => p.bestSeller);
+  const bestSellers = PRODUCTS.filter((p) => p.bestSeller).slice(0, 3);
+  const savingProducts = PRODUCTS.filter((p) => getSavingBadge(p));
 
   return (
     <>
@@ -66,7 +166,7 @@ export default function Home() {
       </div>
 
       {/* Hero */}
-      <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-12 lg:grid-cols-[1.1fr_1fr] lg:py-20">
+      <section className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-12 lg:grid-cols-2 lg:py-20">
         <div>
           <h1 className="font-display font-extrabold tracking-tight">
             <span className="block text-5xl leading-[1.05] sm:text-7xl">
@@ -75,13 +175,13 @@ export default function Home() {
                 Mood.
               </span>
             </span>
-            <span className="mt-5 block text-2xl leading-snug sm:text-3xl">
+            <span className="mt-5 block text-balance text-2xl leading-snug sm:text-3xl">
               Pilihan Pas Buat Temen Nyemil di Mana Saja.
             </span>
           </h1>
           <p className="mt-6 max-w-xl text-lg text-navy/80">
-            Mau nyari yang manis, gurih, atau segar? Pilih kategori cemilan favoritmu, pesan,
-            lalu ambil langsung di titik pickup {SITE.pickupLocation}.
+            Mau yang manis, gurih, atau segar? Pilih kategori favoritmu, pesan, lalu siap
+            dinikmati kapan saja.
           </p>
           <div className="mt-8">
             <Link to="/menu" className="btn-primary text-lg">
@@ -90,18 +190,30 @@ export default function Home() {
           </div>
         </div>
 
-        {first && second && (
-          <div className="relative mx-auto h-[31rem] w-full max-w-md" aria-label="Menu Best Seller">
-            <div className="absolute right-0 top-0 z-10 grid size-20 rotate-12 place-items-center rounded-full border-2 border-navy bg-brand text-center font-display text-sm font-extrabold leading-tight text-cream shadow-hard">
-              OPEN
-              <br />
-              PO!
+        {bestSellers.length > 0 && (
+          <div className="relative" aria-label="Menu Best Seller">
+            <div className="relative z-10 mb-4 flex justify-end sm:absolute sm:right-0 sm:top-0 sm:mb-0">
+              <Link
+                to="/menu"
+                aria-label="Open PO, lihat menu"
+                className="grid size-24 rotate-12 place-items-center rounded-full border-2 border-navy bg-brand text-center font-display font-extrabold leading-none text-cream shadow-hard-lg ring-4 ring-sun transition duration-200 hover:rotate-0 hover:scale-110 active:scale-95 motion-safe:animate-pulse-soft sm:size-28"
+              >
+                <span>
+                  <span className="block text-2xl sm:text-3xl">OPEN</span>
+                  <span className="block text-2xl sm:text-3xl">PO!</span>
+                </span>
+              </Link>
             </div>
-            <FloatingCard product={first} className="absolute left-0 top-0 -rotate-3" />
-            <FloatingCard
-              product={second}
-              className="absolute bottom-0 right-0 rotate-3 [animation-delay:-2s]"
-            />
+
+            <div className="flex flex-col gap-5">
+              {bestSellers.map((product, i) => (
+                <FloatingCard
+                  key={product.id}
+                  product={product}
+                  className={FLOAT_STYLES[i % FLOAT_STYLES.length]}
+                />
+              ))}
+            </div>
           </div>
         )}
       </section>
@@ -116,7 +228,7 @@ export default function Home() {
             <Link
               key={cat}
               to={`/menu?kategori=${encodeURIComponent(cat)}`}
-              className="card group flex overflow-hidden transition hover:-translate-y-1 hover:shadow-hard-lg sm:flex-col"
+              className="card group flex overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg sm:flex-col"
             >
               <FoodIllustration
                 art={CATEGORY_INFO[cat].art}
@@ -137,32 +249,105 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Jam operasional & pickup */}
+      {/* Info operasional */}
       <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="card flex flex-wrap items-center justify-center gap-8 px-6 py-10 sm:gap-14">
-          <div className="-rotate-3 rounded-xl border-2 border-navy bg-brand px-6 py-4 text-cream shadow-hard transition hover:rotate-0">
-            <p className="text-xs font-bold uppercase tracking-widest">Jam Buka</p>
-            <p className="font-display text-2xl font-extrabold">{SITE.hoursLabel}</p>
-          </div>
-          <div className="rotate-2 rounded-xl border-2 border-navy bg-sun px-6 py-4 text-navy shadow-hard transition hover:rotate-0">
-            <p className="text-xs font-bold uppercase tracking-widest">Pickup Point</p>
-            <p className="font-display text-2xl font-extrabold">{SITE.pickupLocation}</p>
-          </div>
+        <div className="grid gap-6 sm:grid-cols-3">
+          {INFO_CARDS.map(({ label, value, Icon, style }) => (
+            <div
+              key={label}
+              className={`rounded-2xl border-2 border-navy p-5 shadow-hard transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${style}`}
+            >
+              <Icon className="size-8" />
+              <p className="mt-3 text-xs font-bold uppercase tracking-widest">{label}</p>
+              <p className="mt-1 font-display text-2xl font-extrabold leading-tight">{value}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Tentang singkat & keunggulan */}
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <p className="max-w-3xl text-balance font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-          Siap nemenin hari-hari sibukmu dengan asupan sweet treats, savory snacks, dan minuman
-          segar berkualitas.
-        </p>
-        <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {PERKS.map((perk) => (
-            <div key={perk.title} className="border-t-2 border-navy pt-4">
-              <h3 className="font-display text-xl font-bold">{perk.title}</h3>
-              <p className="mt-1.5 text-navy/75">{perk.text}</p>
+      {/* Serba Rp5K */}
+      {savingProducts.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 py-14">
+          <div className="relative">
+            <Starburst className="absolute -top-10 right-2 z-10 size-28 rotate-12 motion-safe:animate-pulse-soft sm:right-8 sm:size-36">
+              <span className="block text-lg sm:text-2xl">SERBA</span>
+              <span className="block text-3xl sm:text-5xl">Rp5K</span>
+            </Starburst>
+
+            <div className="overflow-hidden rounded-3xl border-4 border-navy bg-sun shadow-pop">
+              <Marquee
+                items={["Serba Rp5K", "Jajan Hemat", "Pre-Order Sekarang"]}
+                className="border-b-4 border-navy bg-navy py-2 text-cream"
+              />
+
+              <div className="p-5 pt-8 sm:p-8" style={HALFTONE}>
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <h2 className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+                      Jajan Hemat,
+                      <br />
+                      <span className="inline-block -rotate-1 rounded-lg border-2 border-navy bg-cream px-2 shadow-hard">
+                        Tetep Puas!
+                      </span>
+                    </h2>
+                    <p className="mt-4 max-w-md font-semibold">
+                      Pilihan jajan yang ramah di dompet. Tinggal pilih, tambah, dan pesan.
+                    </p>
+                  </div>
+                  <Link to="/menu" className="btn-dark text-sm">
+                    Lihat semua menu →
+                  </Link>
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                  {savingProducts.map((product) => (
+                    <PromoCard key={product.id} product={product} />
+                  ))}
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Cara pesan */}
+      <section className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="font-display text-3xl font-extrabold tracking-tight">Cara Pesan</h2>
+        <p className="mt-2 text-navy/75">Gampang banget, cuma tiga langkah.</p>
+        <ol className="mt-8 grid gap-6 md:grid-cols-3">
+          {STEPS.map(({ title, text, Icon }, i) => (
+            <li
+              key={title}
+              className="card relative p-5 transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg"
+            >
+              <div className="flex items-center justify-between">
+                <span className="grid size-11 place-items-center rounded-full border-2 border-navy bg-sun font-display text-xl font-extrabold">
+                  {i + 1}
+                </span>
+                <Icon className="size-7 text-brand" />
+              </div>
+              <h3 className="mt-4 font-display text-xl font-bold">{title}</h3>
+              <p className="mt-1.5 text-navy/75">{text}</p>
+              {i < STEPS.length - 1 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-[18px] top-1/2 z-10 hidden -translate-y-1/2 text-2xl font-bold md:block"
+                >
+                  →
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto max-w-3xl px-4 py-12">
+        <h2 className="font-display text-3xl font-extrabold tracking-tight">Tanya Jawab</h2>
+        <p className="mt-2 text-navy/75">Yang sering ditanyain soal pre-order Kodinc.</p>
+        <div className="mt-6 space-y-3">
+          {FAQS.map((item) => (
+            <FaqItem key={item.q} {...item} />
           ))}
         </div>
       </section>

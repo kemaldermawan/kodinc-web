@@ -24,7 +24,7 @@ export function buildOrderMessage({ name, notes, pickupDate, pickupTime, payment
     `Catatan: ${notes || "-"}`,
   ];
 
-  if (payment === "qris-now") {
+  if (payment === "qris") {
     lines.push("", "Bukti pembayaran QRIS saya kirim setelah pesan ini.");
   }
 

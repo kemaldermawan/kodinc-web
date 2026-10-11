@@ -1,11 +1,15 @@
-const WHATSAPP_NUMBER = "6289517022938";
+const WHATSAPP_NUMBER = "62895326183306";
 
 export const SITE = {
   name: "Kodinc",
-  tagline: "Feed Your Mood. Sweet treats, savory snacks, dan minuman segar.",
-  announcement: "⚡ JAM OPERASIONAL HARI INI: 10.00 - 15.00 WIB • Sikat sebelum kehabisan!",
+  tagline: "Feed Your Mood. Sweet treats, savory snacks, and refreshing drinks.",
+  announcement: "⚡✨ Siap Nemenin Hari Sibukmu • Pre-Order jajanan favoritmu sekarang di sini!",
   whatsappNumber: WHATSAPP_NUMBER,
   pickupLocation: "Kampus A UNJ",
+  pickupArea: "Area Kampus A",
+  DaysLabel: "Senin - Jumat",
+  // Hari buka dalam angka JS: 0 = Minggu, 1 = Senin, ... 6 = Sabtu
+  openDays: [1, 2, 3, 4, 5],
   hoursLabel: "10.00 - 15.00 WIB",
   // Ubah ke true kalau foto produk asli sudah ada di public/images/
   usePhotos: false,
@@ -18,25 +22,22 @@ export const SITE = {
   }),
   socials: [
     { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}` },
-    { label: "Instagram", href: "https://instagram.com/GANTI_USERNAME" },
-    { label: "TikTok", href: "https://tiktok.com/@GANTI_USERNAME" },
+    { label: "Instagram", href: "https://instagram.com/thekodinc" },
+    { label: "TikTok", href: "https://tiktok.com/@thekodinc" },
+    { label: "X (Twitter)", href: "https://x.com/TheKodinc" },
+    { label: "Facebook", href: "https://facebook.com/thekodinc" },
   ],
 };
 
 export const PAYMENT_METHODS = [
   {
-    id: "qris-now",
-    label: "Bayar sekarang via QRIS",
+    id: "qris",
+    label: "QRIS",
     hint: "Scan QRIS, lalu kirim bukti bayar lewat WhatsApp.",
   },
   {
-    id: "qris-pickup",
-    label: "QRIS saat ambil",
-    hint: "Bayar dengan QRIS ketika pesanan diambil.",
-  },
-  {
-    id: "cash-pickup",
-    label: "Cash saat ambil",
-    hint: "Kalau bisa, siapkan uang pas.",
+    id: "cash",
+    label: "Cash / Tunai",
+    hint: "Bayar tunai saat pesanan diambil. Kalau bisa, siapkan uang pas.",
   },
 ];
