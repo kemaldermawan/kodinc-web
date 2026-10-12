@@ -1,16 +1,22 @@
 import { Link } from "react-router-dom";
-import FoodIllustration from "../components/FoodIllustration";
+import CategoryStack from "../components/CategoryStack";
 import { CalendarIcon, ClockIcon, PinIcon } from "../components/Icons";
 import Marquee from "../components/Marquee";
+import ProductImage from "../components/ProductImage";
 import SocialIcon from "../components/SocialIcons";
 import { SITE } from "../config/site";
-import { CATEGORY_INFO } from "../data/products";
+import { PRODUCTS } from "../data/products";
 
 const POLAROIDS = [
-  { cat: "Dimsum", label: "Gurih", style: "-rotate-6 mt-6" },
-  { cat: "Donat & Cookies", label: "Manis", style: "rotate-2" },
-  { cat: "Minuman", label: "Segar", style: "rotate-6 mt-10" },
+  { cat: "Dimsum", productId: "dimsum-mentai-original", label: "Gurih", style: "-rotate-6 mt-6" },
+  { cat: "Donat & Cookies", productId: "donat-strawberry", label: "Manis", style: "rotate-2" },
+  { cat: "Minuman", productId: "choco-dreamy", label: "Segar", style: "rotate-6 mt-10" },
 ];
+
+// Cari produknya; kalau id tidak ketemu, pakai produk pertama di kategori itu
+const findProduct = ({ cat, productId }) =>
+  PRODUCTS.find((p) => p.id === productId) ??
+  PRODUCTS.find((p) => p.category === cat && !p.comingSoon);
 
 const FLAVORS = [
   {
@@ -107,21 +113,25 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            {POLAROIDS.map(({ cat, label, style }) => (
-              <figure
-                key={cat}
-                className={`card p-1.5 transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${style}`}
-              >
-                <FoodIllustration
-                  art={CATEGORY_INFO[cat].art}
-                  bg={CATEGORY_INFO[cat].bg}
-                  className="aspect-square w-full rounded-lg border-2 border-navy"
-                />
-                <figcaption className="py-1.5 text-center font-display text-sm font-extrabold">
-                  {label}
-                </figcaption>
-              </figure>
-            ))}
+            {POLAROIDS.map((item) => {
+              const product = findProduct(item);
+              if (!product) return null;
+
+              return (
+                <figure
+                  key={item.label}
+                  className={`card p-1.5 transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${item.style}`}
+                >
+                  <ProductImage
+                    product={product}
+                    className="aspect-square w-full overflow-hidden rounded-lg border-2 border-navy"
+                  />
+                  <figcaption className="py-1.5 text-center font-display text-sm font-extrabold">
+                    {item.label}
+                  </figcaption>
+                </figure>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -142,13 +152,9 @@ export default function About() {
           {FLAVORS.map(({ title, sub, text, cat, tilt, bg }) => (
             <article
               key={title}
-              className={`card overflow-hidden transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${tilt}`}
+              className={`card group overflow-hidden transition duration-200 hover:-translate-y-1 hover:rotate-0 hover:shadow-hard-lg ${tilt}`}
             >
-              <FoodIllustration
-                art={CATEGORY_INFO[cat].art}
-                bg={CATEGORY_INFO[cat].bg}
-                className="h-36 border-b-2 border-navy"
-              />
+              <CategoryStack category={cat} className="aspect-[16/9] border-b-2 border-navy" />
               <div className={`p-5 ${bg}`}>
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80">{sub}</p>
                 <h3 className="font-display text-3xl font-extrabold">{title}</h3>

@@ -102,7 +102,7 @@ function Cookie({ dough = "#D9A15B", chip = "#5B3220" }) {
 }
 
 function Drink({ layers = ["#8A4B2E", "#5B3220"], whip }) {
-  const id = useId().replace(/:/g, "");
+  const id = useId().replace(/[^a-zA-Z0-9]/g, "");
   const cup = "M58 66 H142 L130 168 Q129 178 119 178 H81 Q71 178 70 168 Z";
 
   return (
@@ -150,7 +150,13 @@ function Drink({ layers = ["#8A4B2E", "#5B3220"], whip }) {
 
 const KINDS = { dimsum: Dimsum, donut: Donut, cookie: Cookie, drink: Drink };
 
-export default function FoodIllustration({ art, bg = "#F6DCAB", label, className = "" }) {
+export default function FoodIllustration({
+  art,
+  bg = "#F6DCAB",
+  label,
+  className = "",
+  plain = false,
+}) {
   const Art = KINDS[art?.type] ?? Cookie;
 
   return (
@@ -159,11 +165,15 @@ export default function FoodIllustration({ art, bg = "#F6DCAB", label, className
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}
       className={`grid place-items-center ${className}`}
-      style={{
-        backgroundColor: bg,
-        backgroundImage: "radial-gradient(rgb(1 47 73 / 0.12) 1px, transparent 1px)",
-        backgroundSize: "14px 14px",
-      }}
+      style={
+        plain
+          ? undefined
+          : {
+              backgroundColor: bg,
+              backgroundImage: "radial-gradient(rgb(1 47 73 / 0.12) 1px, transparent 1px)",
+              backgroundSize: "14px 14px",
+            }
+      }
     >
       <svg viewBox="0 0 200 200" className="size-full max-h-full p-2" aria-hidden="true">
         <Art {...art} />

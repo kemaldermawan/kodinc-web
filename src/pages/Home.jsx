@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import AddToCartButton from "../components/AddToCartButton";
-import FoodIllustration from "../components/FoodIllustration";
+import CategoryStack from "../components/CategoryStack";
 import { CalendarIcon, CartIcon, ChatIcon, ClockIcon, PinIcon, PlusIcon } from "../components/Icons";
 import Marquee from "../components/Marquee";
 import ProductImage from "../components/ProductImage";
@@ -213,13 +213,9 @@ export default function Home() {
             <Link
               key={cat}
               to={`/menu?kategori=${encodeURIComponent(cat)}`}
-              className="card group flex overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg sm:flex-col"
+              className="card group flex flex-col overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-hard-lg"
             >
-              <FoodIllustration
-                art={CATEGORY_INFO[cat].art}
-                bg={CATEGORY_INFO[cat].bg}
-                className="h-28 w-28 shrink-0 border-r-2 border-navy sm:h-44 sm:w-full sm:border-b-2 sm:border-r-0"
-              />
+              <CategoryStack category={cat} className="aspect-[16/9] border-b-2 border-navy" />
               <div className="flex flex-1 items-center justify-between gap-2 p-4">
                 <div>
                   <h3 className="font-display text-xl font-extrabold leading-tight">{cat}</h3>
@@ -326,13 +322,57 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-3xl px-4 py-12">
-        <h2 className="font-display text-3xl font-extrabold tracking-tight">Tanya Jawab</h2>
-        <p className="mt-2 text-navy/75">Yang sering ditanyain soal pre-order Kodinc.</p>
-        <div className="mt-6 space-y-3">
-          {FAQS.map((item) => (
-            <FaqItem key={item.q} {...item} />
-          ))}
+            {/* FAQ */}
+      <section className="mx-auto max-w-6xl px-4 py-14">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.5fr] lg:items-start">
+          <div className="lg:sticky lg:top-28">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <span className="inline-block -rotate-2 rounded-md border-2 border-navy bg-brand px-3 py-1 text-xs font-extrabold uppercase tracking-widest text-cream shadow-hard">
+                  FAQ
+                </span>
+                <h2 className="mt-4 font-display text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+                  Tanya{" "}
+                  <span className="inline-block rotate-1 rounded-lg border-2 border-navy bg-sun px-2 shadow-hard">
+                    Jawab
+                  </span>
+                </h2>
+                <p className="mt-3 text-navy/75">Yang sering ditanyain soal pre-order Kodinc.</p>
+              </div>
+
+              <Starburst className="size-24 shrink-0 rotate-12 motion-safe:animate-pulse-soft sm:size-28">
+                <span className="block text-5xl sm:text-6xl">?</span>
+              </Starburst>
+            </div>
+
+            <div
+              className="mt-8 rounded-2xl border-2 border-navy bg-sun p-5 shadow-hard"
+              style={HALFTONE}
+            >
+              <p className="font-display text-xl font-extrabold leading-tight">
+                Masih ada yang bingung?
+              </p>
+              <p className="mt-1 text-navy/80">
+                Chat langsung aja, nanti dibantu lewat WhatsApp.
+              </p>
+              <a
+                href={`https://wa.me/${SITE.whatsappNumber}?text=${encodeURIComponent(
+                  "Halo Kodinc, aku mau tanya soal pre-order."
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-dark mt-4 w-full"
+              >
+                Tanya via WhatsApp ↗
+              </a>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {FAQS.map((item) => (
+              <FaqItem key={item.q} {...item} />
+            ))}
+          </div>
         </div>
       </section>
     </>

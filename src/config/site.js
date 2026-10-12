@@ -25,7 +25,7 @@ export const SITE = {
     { label: "Instagram", href: "https://instagram.com/thekodinc" },
     { label: "TikTok", href: "https://tiktok.com/@thekodinc" },
     { label: "X (Twitter)", href: "https://x.com/TheKodinc" },
-    { label: "Facebook", href: "https://facebook.com/thekodinc" },
+    { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61594520845898&mibextid=rS40aB7S9Ucbxw6v" },
   ],
 };
 
